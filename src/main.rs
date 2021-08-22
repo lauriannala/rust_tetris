@@ -1,11 +1,13 @@
 extern crate sdl2;
 
 mod config;
+mod tetromino;
 use config::{HEIGHT, WIDTH, WINDOW_MULTIPLIER};
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
+use tetromino::Tetromino;
 use std::convert::TryInto;
 use std::time::Duration;
 
@@ -24,6 +26,7 @@ pub fn main() -> Result<(), String> {
 
     let mut event_pump = sdl_context.event_pump()?;
 
+    let mut tetromino = Tetromino::new();
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
@@ -56,7 +59,7 @@ pub fn main() -> Result<(), String> {
         canvas.set_draw_color(Color::RGB(255, 255, 255));
         for x in 0..WIDTH {
             for y in 0..HEIGHT {
-                if x == 1 && y == 1 {
+                if tetromino.is_set(x, y) {
                     let render = Rect::new(
                         (x * WINDOW_MULTIPLIER).try_into().unwrap(),
                         (y * WINDOW_MULTIPLIER).try_into().unwrap(),
@@ -67,6 +70,7 @@ pub fn main() -> Result<(), String> {
             }
         }
         canvas.present();
+        tetromino.move_next();
     }
 
     Ok(())
