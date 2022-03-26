@@ -6,7 +6,9 @@ impl Tetromino {
     }
 
     pub fn is_set(&self, requested_x: u32, requested_y: u32) -> bool {
-        self.0.iter().any(|val| val.0 == requested_x && val.1 == requested_y)
+        self.0
+            .iter()
+            .any(|val| val.0 == requested_x && val.1 == requested_y)
     }
 
     pub fn move_next(&mut self) {

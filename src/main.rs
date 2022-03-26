@@ -7,16 +7,19 @@ use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
-use tetromino::Tetromino;
-use std::convert::TryInto;
 use std::time::Duration;
+use tetromino::Tetromino;
 
 pub fn main() -> Result<(), String> {
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
 
     let window = video_subsystem
-        .window("rust_tetris", WIDTH * WINDOW_MULTIPLIER, HEIGHT * WINDOW_MULTIPLIER)
+        .window(
+            "rust_tetris",
+            WIDTH * WINDOW_MULTIPLIER,
+            HEIGHT * WINDOW_MULTIPLIER,
+        )
         .position_centered()
         .opengl()
         .build()
@@ -35,18 +38,30 @@ pub fn main() -> Result<(), String> {
                     keycode: Some(Keycode::Escape),
                     ..
                 } => break 'running,
-                Event::KeyDown { keycode: Some(Keycode::Up), .. } => {
+                Event::KeyDown {
+                    keycode: Some(Keycode::Up),
+                    ..
+                } => {
                     // TODO
-                },
-                Event::KeyDown { keycode: Some(Keycode::Down), .. } => {
+                }
+                Event::KeyDown {
+                    keycode: Some(Keycode::Down),
+                    ..
+                } => {
                     // TODO
-                },
-                Event::KeyDown { keycode: Some(Keycode::Right), .. } => {
+                }
+                Event::KeyDown {
+                    keycode: Some(Keycode::Right),
+                    ..
+                } => {
                     // TODO
-                },
-                Event::KeyDown { keycode: Some(Keycode::Left), .. } => {
+                }
+                Event::KeyDown {
+                    keycode: Some(Keycode::Left),
+                    ..
+                } => {
                     // TODO
-                },
+                }
                 _ => {}
             }
         }
@@ -61,10 +76,11 @@ pub fn main() -> Result<(), String> {
             for y in 0..HEIGHT {
                 if tetromino.is_set(x, y) {
                     let render = Rect::new(
-                        (x * WINDOW_MULTIPLIER).try_into().unwrap(),
-                        (y * WINDOW_MULTIPLIER).try_into().unwrap(),
+                        (x * WINDOW_MULTIPLIER) as i32,
+                        (y * WINDOW_MULTIPLIER) as i32,
                         WINDOW_MULTIPLIER,
-                        WINDOW_MULTIPLIER);
+                        WINDOW_MULTIPLIER,
+                    );
                     canvas.fill_rect(render).unwrap();
                 }
             }
