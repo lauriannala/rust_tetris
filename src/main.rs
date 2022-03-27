@@ -1,6 +1,7 @@
 extern crate sdl2;
 mod config;
 mod field;
+mod pixel;
 mod tetromino;
 use config::{HEIGHT, WIDTH, WINDOW_MULTIPLIER};
 use field::Field;
@@ -76,8 +77,9 @@ pub fn main() -> Result<(), String> {
         canvas.clear();
 
         canvas.set_draw_color(Color::RGB(255, 255, 255));
-        for (x, y) in &field.0 {
-            if tetromino.is_set(*x, *y) {
+        for pixel in &field.0 {
+            let (x, y) = pixel.coordinates;
+            if tetromino.is_set(x, y) {
                 let render = Rect::new(
                     (x * WINDOW_MULTIPLIER) as i32,
                     (y * WINDOW_MULTIPLIER) as i32,
