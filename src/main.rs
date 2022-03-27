@@ -1,8 +1,9 @@
 extern crate sdl2;
-
 mod config;
+mod field;
 mod tetromino;
 use config::{HEIGHT, WIDTH, WINDOW_MULTIPLIER};
+use field::Field;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
@@ -30,6 +31,9 @@ pub fn main() -> Result<(), String> {
     let mut event_pump = sdl_context.event_pump()?;
 
     let mut tetromino = Tetromino::new()?;
+
+    let field = Field::new();
+
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
@@ -72,17 +76,15 @@ pub fn main() -> Result<(), String> {
         canvas.clear();
 
         canvas.set_draw_color(Color::RGB(255, 255, 255));
-        for x in 0..WIDTH {
-            for y in 0..HEIGHT {
-                if tetromino.is_set(x, y) {
-                    let render = Rect::new(
-                        (x * WINDOW_MULTIPLIER) as i32,
-                        (y * WINDOW_MULTIPLIER) as i32,
-                        WINDOW_MULTIPLIER,
-                        WINDOW_MULTIPLIER,
-                    );
-                    canvas.fill_rect(render).unwrap();
-                }
+        for (x, y) in &field.0 {
+            if tetromino.is_set(*x, *y) {
+                let render = Rect::new(
+                    (x * WINDOW_MULTIPLIER) as i32,
+                    (y * WINDOW_MULTIPLIER) as i32,
+                    WINDOW_MULTIPLIER,
+                    WINDOW_MULTIPLIER,
+                );
+                canvas.fill_rect(render).unwrap();
             }
         }
         canvas.present();
