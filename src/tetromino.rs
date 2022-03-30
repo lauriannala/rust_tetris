@@ -1,7 +1,7 @@
 use crate::WIDTH;
 use rand::seq::SliceRandom;
 
-pub struct Tetromino(Vec<(u32, u32)>);
+pub struct Tetromino(pub Vec<(u32, u32)>);
 
 impl Tetromino {
     pub fn new() -> Result<Tetromino, &'static str> {
@@ -18,8 +18,15 @@ impl Tetromino {
             .any(|val| val.0 == requested_x && val.1 == requested_y)
     }
 
-    pub fn move_next(&mut self) {
-        self.0 = self.0.iter().map(|value| (value.0, value.1 + 1)).collect()
+    pub fn move_next(&mut self, field_height: u32) -> Result<bool, &'static str> {
+        let new_max_y = match self.0.iter().map(|value| value.1 + 1).max() {
+            None => Err("Could not determine new max y for tetromino"),
+            Some(value) => Ok(value),
+        }?;
+
+        self.0 = self.0.iter().map(|value| (value.0, value.1 + 1)).collect();
+
+        Ok(new_max_y == field_height - 1)
     }
 }
 

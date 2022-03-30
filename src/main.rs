@@ -33,7 +33,7 @@ pub fn main() -> Result<(), String> {
 
     let mut tetromino = Tetromino::new()?;
 
-    let field = Field::new();
+    let mut field = Field::new();
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -77,9 +77,9 @@ pub fn main() -> Result<(), String> {
         canvas.clear();
 
         canvas.set_draw_color(Color::RGB(255, 255, 255));
-        for pixel in &field.0 {
+        for pixel in &field.pixels {
             let (x, y) = pixel.coordinates;
-            if tetromino.is_set(x, y) {
+            if tetromino.is_set(x, y) || field.is_set(x, y) {
                 let render = Rect::new(
                     (x * WINDOW_MULTIPLIER) as i32,
                     (y * WINDOW_MULTIPLIER) as i32,
@@ -90,7 +90,11 @@ pub fn main() -> Result<(), String> {
             }
         }
         canvas.present();
-        tetromino.move_next();
+        let field_end_reached = tetromino.move_next(HEIGHT)?;
+        if field_end_reached {
+            field.fill_tetromino(&tetromino);
+            tetromino = Tetromino::new()?;
+        }
     }
 
     Ok(())
