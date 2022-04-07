@@ -90,8 +90,8 @@ pub fn main() -> Result<(), String> {
             }
         }
         canvas.present();
-        let field_end_reached = tetromino.move_next(HEIGHT)?;
-        if field_end_reached {
+        let has_collided = tetromino.move_next(HEIGHT)? || tetromino.has_collision(&field);
+        if has_collided {
             field.fill_tetromino(&tetromino);
             tetromino = Tetromino::new()?;
         }

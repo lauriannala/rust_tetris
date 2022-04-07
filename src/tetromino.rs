@@ -1,4 +1,4 @@
-use crate::WIDTH;
+use crate::{field::Field, WIDTH};
 use rand::seq::SliceRandom;
 
 pub struct Tetromino(pub Vec<(u32, u32)>);
@@ -27,6 +27,15 @@ impl Tetromino {
         self.0 = self.0.iter().map(|value| (value.0, value.1 + 1)).collect();
 
         Ok(new_max_y == field_height - 1)
+    }
+
+    pub fn has_collision(&mut self, field: &Field) -> bool {
+        for coord in self.0.iter() {
+            if field.is_set(coord.0, coord.1 + 1) {
+                return true;
+            }
+        }
+        false
     }
 }
 
