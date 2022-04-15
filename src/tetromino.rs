@@ -29,6 +29,36 @@ impl Tetromino {
         Ok(new_max_y == field_height - 1)
     }
 
+    pub fn move_left(&mut self) -> Result<(), &'static str> {
+        let new_min_x = match self.0.iter().map(|value| value.0 as i32 - 1).min() {
+            None => Err("Could not determine new min x for tetromino"),
+            Some(value) => Ok(value),
+        }?;
+
+        match new_min_x < 0 {
+            true => Ok(()),
+            false => {
+                self.0 = self.0.iter().map(|value| (value.0 - 1, value.1)).collect();
+                Ok(())
+            }
+        }
+    }
+
+    pub fn move_right(&mut self) -> Result<(), &'static str> {
+        let new_max_x = match self.0.iter().map(|value| value.0 + 1).max() {
+            None => Err("Could not determine new max x for tetromino"),
+            Some(value) => Ok(value),
+        }?;
+
+        match new_max_x == WIDTH {
+            true => Ok(()),
+            false => {
+                self.0 = self.0.iter().map(|value| (value.0 + 1, value.1)).collect();
+                Ok(())
+            }
+        }
+    }
+
     pub fn has_collision(&mut self, field: &Field) -> bool {
         for coord in self.0.iter() {
             if field.is_set(coord.0, coord.1 + 1) {

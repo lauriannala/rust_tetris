@@ -59,13 +59,13 @@ pub fn main() -> Result<(), String> {
                     keycode: Some(Keycode::Right),
                     ..
                 } => {
-                    // TODO
+                    tetromino.move_right()?;
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Left),
                     ..
                 } => {
-                    // TODO
+                    tetromino.move_left()?;
                 }
                 _ => {}
             }
