@@ -29,7 +29,7 @@ impl Field {
     }
 
     pub fn fill_tetromino(&mut self, tetromino: &Tetromino) {
-        for (x, y) in &tetromino.0 {
+        for (x, y) in &tetromino.pixels {
             for pixel in &mut self.pixels {
                 if pixel.coordinates.0 == *x && pixel.coordinates.1 == *y {
                     self.filled_pixels.insert((*x, *y));
