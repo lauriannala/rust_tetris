@@ -77,9 +77,14 @@ impl Tetromino {
     pub fn transform(&mut self) {
         self.pixels = self.pixels.iter().map(|value| {
             let center = (self.center.0 as i32, self.center.1 as i32);
+
             let x = value.0 as i32 - center.0;
             let y = value.1 as i32 - center.1;
-            ((center.0 + y) as u32, (center.1 + x) as u32)
+
+            let transform_x = (center.0 - y) as u32;
+            let transform_y = (center.1 + x) as u32;
+
+            (transform_x, transform_y)
         }).collect();
     }
 }
