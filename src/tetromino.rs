@@ -10,14 +10,14 @@ pub enum TetrominoType {
 }
 
 pub struct Tetromino {
-    pub pixels: Vec<(u32, u32)>,
-    pub center: (u32, u32),
+    pub pixels: Vec<(i32, i32)>,
+    pub center: (i32, i32),
     pub tetromino_type: &'static TetrominoType,
 }
 
 impl Tetromino {
     pub fn new() -> Result<Tetromino, &'static str> {
-        let start_point = WIDTH / 2;
+        let start_point = (WIDTH / 2) as i32;
         match tetromino_pool(start_point).choose(&mut rand::thread_rng()) {
             None => Err("Tetromino pool is empty."),
             Some(value) => Ok(Tetromino {
@@ -28,7 +28,7 @@ impl Tetromino {
         }
     }
 
-    pub fn is_set(&self, requested_x: u32, requested_y: u32) -> bool {
+    pub fn is_set(&self, requested_x: i32, requested_y: i32) -> bool {
         self.pixels
             .iter()
             .any(|val| val.0 == requested_x && val.1 == requested_y)
@@ -46,7 +46,7 @@ impl Tetromino {
             .collect();
         self.center = (self.center.0, self.center.1 + 1);
 
-        Ok(new_max_y == field_height - 1)
+        Ok(new_max_y == field_height as i32 - 1)
     }
 
     pub fn move_left(&mut self) -> Result<(), &'static str> {
@@ -75,7 +75,7 @@ impl Tetromino {
             Some(value) => Ok(value),
         }?;
 
-        match new_max_x == WIDTH {
+        match new_max_x == WIDTH as i32 {
             true => Ok(()),
             false => {
                 self.pixels = self
@@ -108,8 +108,8 @@ impl Tetromino {
                 let x = value.0 as i32 - center.0;
                 let y = value.1 as i32 - center.1;
 
-                let transform_x = (center.0 - y) as u32;
-                let transform_y = (center.1 + x) as u32;
+                let transform_x = center.0 - y;
+                let transform_y = center.1 + x;
 
                 (transform_x, transform_y)
             })
@@ -117,7 +117,7 @@ impl Tetromino {
     }
 }
 
-fn get_center(start_point: u32, tetromino_type: &'static TetrominoType) -> (u32, u32) {
+fn get_center(start_point: i32, tetromino_type: &'static TetrominoType) -> (i32, i32) {
     match tetromino_type {
         &TetrominoType::STRAIGHT => (start_point, 0),
         &TetrominoType::SQUARE => (start_point, 0),
@@ -127,7 +127,7 @@ fn get_center(start_point: u32, tetromino_type: &'static TetrominoType) -> (u32,
     }
 }
 
-fn tetromino_pool(starting_point: u32) -> [(&'static TetrominoType, Vec<(u32, u32)>); 5] {
+fn tetromino_pool(starting_point: i32) -> [(&'static TetrominoType, Vec<(i32, i32)>); 5] {
     [
         (&TetrominoType::STRAIGHT, tetromino_straight(starting_point)),
         (&TetrominoType::SQUARE, tetromino_square(starting_point)),
@@ -137,7 +137,7 @@ fn tetromino_pool(starting_point: u32) -> [(&'static TetrominoType, Vec<(u32, u3
     ]
 }
 
-fn tetromino_straight(starting_point: u32) -> Vec<(u32, u32)> {
+fn tetromino_straight(starting_point: i32) -> Vec<(i32, i32)> {
     vec![
         (starting_point - 2, 0),
         (starting_point - 1, 0),
@@ -146,7 +146,7 @@ fn tetromino_straight(starting_point: u32) -> Vec<(u32, u32)> {
     ]
 }
 
-fn tetromino_square(starting_point: u32) -> Vec<(u32, u32)> {
+fn tetromino_square(starting_point: i32) -> Vec<(i32, i32)> {
     vec![
         (starting_point, 0),
         (starting_point, 1),
@@ -155,7 +155,7 @@ fn tetromino_square(starting_point: u32) -> Vec<(u32, u32)> {
     ]
 }
 
-fn tetromino_t(starting_point: u32) -> Vec<(u32, u32)> {
+fn tetromino_t(starting_point: i32) -> Vec<(i32, i32)> {
     vec![
         (starting_point - 1, 0),
         (starting_point, 0),
@@ -164,7 +164,7 @@ fn tetromino_t(starting_point: u32) -> Vec<(u32, u32)> {
     ]
 }
 
-fn tetromino_l(starting_point: u32) -> Vec<(u32, u32)> {
+fn tetromino_l(starting_point: i32) -> Vec<(i32, i32)> {
     vec![
         (starting_point - 1, 0),
         (starting_point - 1, 1),
@@ -173,7 +173,7 @@ fn tetromino_l(starting_point: u32) -> Vec<(u32, u32)> {
     ]
 }
 
-fn tetromino_skew(starting_point: u32) -> Vec<(u32, u32)> {
+fn tetromino_skew(starting_point: i32) -> Vec<(i32, i32)> {
     vec![
         (starting_point, 0),
         (starting_point + 1, 0),

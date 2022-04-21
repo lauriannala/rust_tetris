@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use crate::{pixel::Pixel, Tetromino, HEIGHT, WIDTH};
 pub struct Field {
     pub pixels: Vec<Pixel>,
-    pub filled_pixels: HashSet<(u32, u32)>,
+    pub filled_pixels: HashSet<(i32, i32)>,
 }
 
 impl Field {
@@ -14,14 +14,14 @@ impl Field {
         };
         for x in 0..WIDTH {
             for y in 0..HEIGHT {
-                field.pixels.push(Pixel::new(x, y));
+                field.pixels.push(Pixel::new(x as i32, y as i32));
             }
         }
 
         field
     }
 
-    pub fn is_set(&self, requested_x: u32, requested_y: u32) -> bool {
+    pub fn is_set(&self, requested_x: i32, requested_y: i32) -> bool {
         match self.filled_pixels.get(&(requested_x, requested_y)) {
             None => false,
             Some(_value) => true,

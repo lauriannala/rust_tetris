@@ -1,9 +1,9 @@
 pub struct Pixel {
-    pub coordinates: (u32, u32),
+    pub coordinates: (i32, i32),
 }
 
 impl Pixel {
-    pub fn new(x: u32, y: u32) -> Pixel {
+    pub fn new(x: i32, y: i32) -> Pixel {
         Pixel {
             coordinates: (x, y),
         }

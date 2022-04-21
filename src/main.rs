@@ -76,17 +76,20 @@ pub fn main() -> Result<(), String> {
         canvas.set_draw_color(Color::RGB(0, 0, 0));
         canvas.clear();
 
-        canvas.set_draw_color(Color::RGB(255, 255, 255));
         for pixel in &field.pixels {
+            canvas.set_draw_color(Color::RGB(255, 255, 255));
             let (x, y) = pixel.coordinates;
             if tetromino.is_set(x, y) || field.is_set(x, y) {
                 let render = Rect::new(
-                    (x * WINDOW_MULTIPLIER) as i32,
-                    (y * WINDOW_MULTIPLIER) as i32,
+                    x * WINDOW_MULTIPLIER as i32,
+                    y * WINDOW_MULTIPLIER as i32,
                     WINDOW_MULTIPLIER,
                     WINDOW_MULTIPLIER,
                 );
-                canvas.fill_rect(render).unwrap();
+                if tetromino.center.0 == x && tetromino.center.1 == y {
+                    canvas.set_draw_color(Color::RGB(125, 125, 125));
+                }
+                canvas.fill_rect(render)?;
             }
         }
         canvas.present();
