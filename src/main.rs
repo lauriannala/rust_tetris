@@ -95,8 +95,6 @@ pub fn main() -> Result<(), String> {
             field.fill_tetromino(&tetromino);
             tetromino = Tetromino::new()?;
         }
-
-        println!("Center: {:?}", tetromino.center);
     }
 
     Ok(())
