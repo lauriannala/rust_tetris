@@ -99,6 +99,9 @@ impl Tetromino {
     }
 
     pub fn transform(&mut self) {
+        if let TetrominoType::SQUARE = self.tetromino_type {
+            return
+        }
         self.pixels = self
             .pixels
             .iter()
