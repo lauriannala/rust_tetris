@@ -125,45 +125,59 @@ fn get_center(start_point: u32, tetromino_type: &'static TetrominoType) -> (u32,
         &TetrominoType::L => (start_point, 1),
         &TetrominoType::SKEW => (start_point, 1),
     }
-
 }
 
-fn tetromino_pool(center: u32) -> [(&'static TetrominoType, Vec<(u32, u32)>); 5] {
+fn tetromino_pool(starting_point: u32) -> [(&'static TetrominoType, Vec<(u32, u32)>); 5] {
     [
-        (&TetrominoType::STRAIGHT, tetromino_straight(center)),
-        (&TetrominoType::SQUARE, tetromino_square(center)),
-        (&TetrominoType::T, tetromino_t(center)),
-        (&TetrominoType::L, tetromino_l(center)),
-        (&TetrominoType::SKEW, tetromino_skew(center)),
+        (&TetrominoType::STRAIGHT, tetromino_straight(starting_point)),
+        (&TetrominoType::SQUARE, tetromino_square(starting_point)),
+        (&TetrominoType::T, tetromino_t(starting_point)),
+        (&TetrominoType::L, tetromino_l(starting_point)),
+        (&TetrominoType::SKEW, tetromino_skew(starting_point)),
     ]
 }
 
-fn tetromino_straight(center: u32) -> Vec<(u32, u32)> {
+fn tetromino_straight(starting_point: u32) -> Vec<(u32, u32)> {
     vec![
-        (center - 2, 0),
-        (center - 1, 0),
-        (center, 0),
-        (center + 1, 0),
+        (starting_point - 2, 0),
+        (starting_point - 1, 0),
+        (starting_point, 0),
+        (starting_point + 1, 0),
     ]
 }
 
-fn tetromino_square(center: u32) -> Vec<(u32, u32)> {
-    vec![(center, 0), (center, 1), (center - 1, 0), (center - 1, 1)]
-}
-
-fn tetromino_t(center: u32) -> Vec<(u32, u32)> {
-    vec![(center - 1, 0), (center, 0), (center + 1, 0), (center, 1)]
-}
-
-fn tetromino_l(center: u32) -> Vec<(u32, u32)> {
+fn tetromino_square(starting_point: u32) -> Vec<(u32, u32)> {
     vec![
-        (center - 1, 0),
-        (center - 1, 1),
-        (center, 1),
-        (center + 1, 1),
+        (starting_point, 0),
+        (starting_point, 1),
+        (starting_point - 1, 0),
+        (starting_point - 1, 1),
     ]
 }
 
-fn tetromino_skew(center: u32) -> Vec<(u32, u32)> {
-    vec![(center, 0), (center + 1, 0), (center - 1, 1), (center, 1)]
+fn tetromino_t(starting_point: u32) -> Vec<(u32, u32)> {
+    vec![
+        (starting_point - 1, 0),
+        (starting_point, 0),
+        (starting_point + 1, 0),
+        (starting_point, 1),
+    ]
+}
+
+fn tetromino_l(starting_point: u32) -> Vec<(u32, u32)> {
+    vec![
+        (starting_point - 1, 0),
+        (starting_point - 1, 1),
+        (starting_point, 1),
+        (starting_point + 1, 1),
+    ]
+}
+
+fn tetromino_skew(starting_point: u32) -> Vec<(u32, u32)> {
+    vec![
+        (starting_point, 0),
+        (starting_point + 1, 0),
+        (starting_point - 1, 1),
+        (starting_point, 1),
+    ]
 }
