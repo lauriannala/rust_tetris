@@ -9,10 +9,12 @@ pub enum TetrominoType {
     SKEW,
 }
 
+
 pub struct Tetromino {
     pub pixels: Vec<(i32, i32)>,
     pub center: (i32, i32),
     pub tetromino_type: &'static TetrominoType,
+    pub straight_tetromino_index: Option<usize>,
 }
 
 impl Tetromino {
@@ -24,6 +26,11 @@ impl Tetromino {
                 pixels: value.1.clone(),
                 center: get_center(start_point, value.0),
                 tetromino_type: value.0,
+                straight_tetromino_index: if let TetrominoType::STRAIGHT = value.0 {
+                    Some(0)
+                } else {
+                    None
+                },
             }),
         }
     }
@@ -99,30 +106,41 @@ impl Tetromino {
     }
 
     pub fn transform(&mut self) {
-        if let TetrominoType::SQUARE = self.tetromino_type {
-            return
-        }
-        self.pixels = self
-            .pixels
-            .iter()
-            .map(|value| {
+        match self.tetromino_type {
+            &TetrominoType::SQUARE => (),
+            &TetrominoType::STRAIGHT => {
+                match self.straight_tetromino_index {
+                    Some(index) => {
+                        let incremented_index = if index != 3 {index + 1} else {0};
+                        self.pixels = tetromino_straight_options(self.center)[incremented_index].clone();
+                        self.straight_tetromino_index = Some(incremented_index);
+                    }
+                    None => () // TODO: error here.
+                }
+            }
+            _ => {
                 let center = (self.center.0 as i32, self.center.1 as i32);
+                self.pixels = self
+                    .pixels
+                    .iter()
+                    .map(|value| {
+                        let x = value.0 as i32 - center.0;
+                        let y = value.1 as i32 - center.1;
 
-                let x = value.0 as i32 - center.0;
-                let y = value.1 as i32 - center.1;
+                        let transform_x = center.0 - y;
+                        let transform_y = center.1 + x;
 
-                let transform_x = center.0 - y;
-                let transform_y = center.1 + x;
-
-                (transform_x, transform_y)
-            })
-            .collect();
+                        (transform_x, transform_y)
+                    })
+                    .collect();
+            }
+        }
     }
 }
 
 fn get_center(start_point: i32, tetromino_type: &'static TetrominoType) -> (i32, i32) {
     match tetromino_type {
-        &TetrominoType::STRAIGHT => (start_point, 0),
+        &TetrominoType::STRAIGHT => (start_point - 1, 1),
         &TetrominoType::SQUARE => (start_point, 0),
         &TetrominoType::T => (start_point, 0),
         &TetrominoType::L => (start_point, 1),
@@ -132,7 +150,10 @@ fn get_center(start_point: i32, tetromino_type: &'static TetrominoType) -> (i32,
 
 fn tetromino_pool(starting_point: i32) -> [(&'static TetrominoType, Vec<(i32, i32)>); 5] {
     [
-        (&TetrominoType::STRAIGHT, tetromino_straight(starting_point)),
+        (
+            &TetrominoType::STRAIGHT,
+            tetromino_straight_options((starting_point, 0))[0].clone(),
+        ),
         (&TetrominoType::SQUARE, tetromino_square(starting_point)),
         (&TetrominoType::T, tetromino_t(starting_point)),
         (&TetrominoType::L, tetromino_l(starting_point)),
@@ -140,12 +161,32 @@ fn tetromino_pool(starting_point: i32) -> [(&'static TetrominoType, Vec<(i32, i3
     ]
 }
 
-fn tetromino_straight(starting_point: i32) -> Vec<(i32, i32)> {
-    vec![
-        (starting_point - 2, 0),
-        (starting_point - 1, 0),
-        (starting_point, 0),
-        (starting_point + 1, 0),
+fn tetromino_straight_options(starting_point: (i32, i32)) -> [Vec<(i32, i32)>; 4] {
+    [
+        vec![
+            (starting_point.0 - 2, starting_point.1),
+            (starting_point.0 - 1, starting_point.1),
+            (starting_point.0, starting_point.1),
+            (starting_point.0 + 1, starting_point.1),
+        ],
+        vec![
+            (starting_point.0, starting_point.1 - 1),
+            (starting_point.0, starting_point.1),
+            (starting_point.0, starting_point.1 + 1),
+            (starting_point.0, starting_point.1 + 2),
+        ],
+        vec![
+            (starting_point.0 - 2, starting_point.1 + 1),
+            (starting_point.0 - 1, starting_point.1 + 1),
+            (starting_point.0, starting_point.1 + 1),
+            (starting_point.0 + 1, starting_point.1 + 1),
+        ],
+        vec![
+            (starting_point.0 - 1, starting_point.1 - 1),
+            (starting_point.0 - 1, starting_point.1),
+            (starting_point.0 - 1, starting_point.1 + 1),
+            (starting_point.0 - 1, starting_point.1 + 2),
+        ],
     ]
 }
 

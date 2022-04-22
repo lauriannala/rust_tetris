@@ -71,7 +71,7 @@ pub fn main() -> Result<(), String> {
             }
         }
 
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 30));
+        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 15));
 
         canvas.set_draw_color(Color::RGB(0, 0, 0));
         canvas.clear();
