@@ -80,21 +80,7 @@ pub fn main() -> Result<(), String> {
             canvas.set_draw_color(Color::RGB(255, 255, 255));
             let (x, y) = pixel.coordinates;
 
-            let is_center = tetromino.center.0 == x && tetromino.center.1 == y;
-
             if tetromino.is_set(x, y) || field.is_set(x, y) {
-                let render = Rect::new(
-                    x * WINDOW_MULTIPLIER as i32,
-                    y * WINDOW_MULTIPLIER as i32,
-                    WINDOW_MULTIPLIER,
-                    WINDOW_MULTIPLIER,
-                );
-                if is_center {
-                    canvas.set_draw_color(Color::RGB(125, 125, 125));
-                }
-                canvas.fill_rect(render)?;
-            } else if is_center {
-                canvas.set_draw_color(Color::RGB(125, 125, 125));
                 let render = Rect::new(
                     x * WINDOW_MULTIPLIER as i32,
                     y * WINDOW_MULTIPLIER as i32,
