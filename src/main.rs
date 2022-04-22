@@ -96,7 +96,10 @@ pub fn main() -> Result<(), String> {
         canvas.present();
         let has_collided = tetromino.move_next(HEIGHT)? || tetromino.has_collision(&field);
         if has_collided {
-            field.fill_tetromino(&tetromino);
+            let rows_completed = field.fill_tetromino(&tetromino);
+            for row in rows_completed {
+                field.complete_row(row);
+            }
             tetromino = Tetromino::new()?;
         }
     }

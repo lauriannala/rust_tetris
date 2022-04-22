@@ -28,13 +28,34 @@ impl Field {
         }
     }
 
-    pub fn fill_tetromino(&mut self, tetromino: &Tetromino) {
+    /// Fill tetromino. Returns true if row was completed in the process.
+    pub fn fill_tetromino(&mut self, tetromino: &Tetromino) -> Vec<u32> {
+        let mut rows_completed: Vec<u32> = vec![];
         for (x, y) in &tetromino.pixels {
             for pixel in &mut self.pixels {
                 if pixel.coordinates.0 == *x && pixel.coordinates.1 == *y {
                     self.filled_pixels.insert((*x, *y));
+
+                    let mut row_completed = true;
+                    // Check the row.
+                    for x in 0..WIDTH {
+                        if !self.filled_pixels.contains(&(x as i32, *y)) {
+                            row_completed = false;
+                        }
+                    }
+                    if row_completed {
+                        rows_completed.push(*y as u32);
+                        println!("Row completed: {:?}", *y);
+                    } else {
+                        println!("Not yet...");
+                    }
                 }
             }
         }
+        rows_completed
+    }
+
+    pub fn complete_row(&mut self, row: u32) {
+        println!("Completing row: {:?}", &row);
     }
 }
