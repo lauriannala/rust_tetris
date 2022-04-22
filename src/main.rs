@@ -35,11 +35,11 @@ pub fn main() -> Result<(), String> {
 
     let mut field = Field::new();
 
-    let mut speed = 15;
+    let mut speed = 5;
 
     'running: loop {
         for event in event_pump.poll_iter() {
-            speed = 15;
+            speed = 5;
             match event {
                 Event::Quit { .. }
                 | Event::KeyDown {
@@ -56,7 +56,7 @@ pub fn main() -> Result<(), String> {
                     keycode: Some(Keycode::Down),
                     ..
                 } => {
-                    speed = 60;
+                    speed = 15;
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Right),
