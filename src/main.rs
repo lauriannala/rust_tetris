@@ -35,8 +35,11 @@ pub fn main() -> Result<(), String> {
 
     let mut field = Field::new();
 
+    let mut speed = 15;
+
     'running: loop {
         for event in event_pump.poll_iter() {
+            speed = 15;
             match event {
                 Event::Quit { .. }
                 | Event::KeyDown {
@@ -53,7 +56,7 @@ pub fn main() -> Result<(), String> {
                     keycode: Some(Keycode::Down),
                     ..
                 } => {
-                    // TODO
+                    speed = 60;
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Right),
@@ -71,7 +74,7 @@ pub fn main() -> Result<(), String> {
             }
         }
 
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 15));
+        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / speed));
 
         canvas.set_draw_color(Color::RGB(0, 0, 0));
         canvas.clear();
