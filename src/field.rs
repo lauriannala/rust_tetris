@@ -45,9 +45,6 @@ impl Field {
                     }
                     if row_completed {
                         rows_completed.push(*y as u32);
-                        println!("Row completed: {:?}", *y);
-                    } else {
-                        println!("Not yet...");
                     }
                 }
             }
@@ -55,7 +52,30 @@ impl Field {
         rows_completed
     }
 
-    pub fn complete_row(&mut self, row: u32) {
-        println!("Completing row: {:?}", &row);
+    pub fn complete_row(&mut self, row: &i32) {
+        self.filled_pixels.retain(|(_x, y)| *y != *row)
+    }
+
+    pub fn restructure_rows(&mut self, value: Option<&u32>, count: i32) {
+        match value {
+            None => (),
+            Some(row) => {
+                let iter: Vec<(i32, i32)> = self
+                    .filled_pixels
+                    .iter()
+                    .map(|pixel| {
+                        if pixel.1 < *row as i32 {
+                            return (pixel.0, pixel.1 + count);
+                        }
+                        (pixel.0, pixel.1)
+                    })
+                    .collect();
+                let mut restructured: HashSet<(i32, i32)> = HashSet::new();
+                for new_row in iter {
+                    restructured.insert(new_row);
+                }
+                self.filled_pixels = restructured;
+            }
+        }
     }
 }

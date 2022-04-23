@@ -97,9 +97,10 @@ pub fn main() -> Result<(), String> {
         let has_collided = tetromino.move_next(HEIGHT)? || tetromino.has_collision(&field);
         if has_collided {
             let rows_completed = field.fill_tetromino(&tetromino);
-            for row in rows_completed {
-                field.complete_row(row);
+            for row in &rows_completed {
+                field.complete_row(&(*row as i32));
             }
+            field.restructure_rows(rows_completed.iter().min(), rows_completed.len() as i32);
             tetromino = Tetromino::new()?;
         }
     }

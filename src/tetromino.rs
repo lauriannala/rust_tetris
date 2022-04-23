@@ -9,7 +9,6 @@ pub enum TetrominoType {
     SKEW,
 }
 
-
 pub struct Tetromino {
     pub pixels: Vec<(i32, i32)>,
     pub center: (i32, i32),
@@ -111,11 +110,12 @@ impl Tetromino {
             &TetrominoType::STRAIGHT => {
                 match self.straight_tetromino_index {
                     Some(index) => {
-                        let incremented_index = if index != 3 {index + 1} else {0};
-                        self.pixels = tetromino_straight_options(self.center)[incremented_index].clone();
+                        let incremented_index = if index != 3 { index + 1 } else { 0 };
+                        self.pixels =
+                            tetromino_straight_options(self.center)[incremented_index].clone();
                         self.straight_tetromino_index = Some(incremented_index);
                     }
-                    None => () // TODO: error here.
+                    None => (), // TODO: error here.
                 }
             }
             _ => {
