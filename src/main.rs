@@ -37,6 +37,8 @@ pub fn main() -> Result<(), String> {
 
     let mut speed = 5;
 
+    let mut points = 0;
+
     'running: loop {
         for event in event_pump.poll_iter() {
             speed = 5;
@@ -102,8 +104,22 @@ pub fn main() -> Result<(), String> {
             }
             field.restructure_rows(rows_completed.iter().min(), rows_completed.len() as i32);
             tetromino = Tetromino::new()?;
+
+            points = match rows_completed.len() {
+                1 => increment_points(points, 40),
+                2 => increment_points(points, 100),
+                3 => increment_points(points, 300),
+                4 => increment_points(points, 1200),
+                _ => points
+            };
         }
     }
 
     Ok(())
+}
+
+fn increment_points(points: u32, increment: u32) -> u32 {
+    let result = points + increment;
+    println!("{:?} POINTS", &result);
+    result
 }
