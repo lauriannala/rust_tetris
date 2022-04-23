@@ -110,7 +110,7 @@ pub fn main() -> Result<(), String> {
                 2 => increment_points(points, 100),
                 3 => increment_points(points, 300),
                 4 => increment_points(points, 1200),
-                _ => points
+                _ => points,
             };
         }
     }
