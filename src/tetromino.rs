@@ -104,9 +104,9 @@ impl Tetromino {
         false
     }
 
-    pub fn transform(&mut self) {
+    pub fn transform(&mut self) -> Result<(), &'static str> {
         match self.tetromino_type {
-            &TetrominoType::SQUARE => (),
+            &TetrominoType::SQUARE => Ok(()),
             &TetrominoType::STRAIGHT => {
                 match self.straight_tetromino_index {
                     Some(index) => {
@@ -114,8 +114,9 @@ impl Tetromino {
                         self.pixels =
                             tetromino_straight_options(self.center)[incremented_index].clone();
                         self.straight_tetromino_index = Some(incremented_index);
+                        Ok(())
                     }
-                    None => (), // TODO: error here.
+                    None => Err("Straight tetromino index missing from tetromino."),
                 }
             }
             _ => {
@@ -133,6 +134,7 @@ impl Tetromino {
                         (transform_x, transform_y)
                     })
                     .collect();
+                Ok(())
             }
         }
     }

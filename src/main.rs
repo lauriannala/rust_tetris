@@ -50,7 +50,7 @@ pub fn main() -> Result<(), String> {
                     keycode: Some(Keycode::Up),
                     ..
                 } => {
-                    tetromino.transform();
+                    tetromino.transform()?;
                 }
                 Event::KeyDown {
                     keycode: Some(Keycode::Down),
